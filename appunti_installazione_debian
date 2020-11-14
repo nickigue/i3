@@ -1,0 +1,92 @@
+# lista di sudo apt install da fare all'inizio:
+xorg
+i3
+wireless-tools
+network-manager-gnome
+wpasupplicant
+vim
+broadcom-sta-dkms
+firmware-b43-installer
+alsa-utils
+brightnessctl
+lightdm
+xterm
+xfonts-cyrillic
+pulseaudio
+compton
+rofi
+lxappearence
+i3blocks
+
+## configurazione wifi
+
+# individuare scheda di rete:
+
+lspci -nn | grep Network
+
+# tools da installare:
+
+sudo apt install wireless-tools
+sudo apt install network-manager-gnome
+sudo apt install wpasupplicant
+
+## installazione repository non libere
+
+sudo vim /etc/apt/sources.list
+aggiungere "contrib non-free" ad ognuna delle sei repository già disponibili.
+
+sudo apt update
+sudo apt dist upgrade
+
+sudo reboot
+
+sudo apt install linux-image-$(uname -r|sed 's,[^-]*-[^-]*-,,') linux headers-$(uname -r|sed 's,[^-]*-[^-]*-,,') broadcom-sta-dkms
+
+sudo modprobe -r b44 b43
+
+sudo modprobe wl
+
+## alla prima flop (non so se serve)
+
+## https://wiki.debian.org/bcm43xx sito per capire come si fa
+
+apt install firmware-b43-installer
+
+dopo tutti questi passaggi il wifi si abilita e funziona
+
+################################################################
+
+## gestione volume
+
+sudo apt install pulseaudio
+sudo apt install alsa-utils
+sudo reboot
+
+funziona, si attiva il volume ma non si gestisce.
+
+# configurazione ALSA
+
+alsamixer da terminale, alzo e abbasso con freccette, ok ma cerco di usare tasti pc
+
+# alzare il volume da tasti PC
+
+bindsym XF86AudioLowerVolume exec amixer set Master 1%-
+bindsym XF86AudioRaiseVolume exec amixer set Master 1%+
+bindsym XF86AudioMute exec amixer -D pulse set Master 1+ toggle
+
+Funziona tutto, non esce dal mute col volume giù, solo col mute.
+
+###############################################
+
+# alzare ed abbassare luminosità schermo
+
+sudo apt install brightnessctl
+bindsym sudo brightnessctl -d "intel_backlight" set 500+- alza e abbassa di 500 (max 4882) lo schermo HP Principale. settare a 10%+- su i3 è un buono step.
+
+# scaricare adobe reader
+
+$ wget -O ~/adobe.deb ftp://ftp.adobe.com/pub/adobe/reader/unix/9.x/9.5.5/enu/AdbeRdr9.5.5-1_i386linux_enu.deb
+$ sudo dpkg --add-architecture i386
+$ sudo apt update
+$ sudo apt install libxml2:i386 libcanberra-gtk-module:i386 gtk2-engines-murrine:i386 libatk-adaptor:i386
+sudo dpkg -i ~/adobe.deb
