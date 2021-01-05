@@ -1,1 +1,1 @@
-# i3gnome
+# i3config
